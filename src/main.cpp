@@ -2,39 +2,54 @@
 
 #include <Adafruit_NeoPixel.h>
 
-#define LED_PIN 16
+#define DIN_PIN 16            // NeoPixel　の出力ピン番号はGP16
+#define LED_COUNT 1           // LEDの連結数
+#define WAIT_MS 1000          // 次の点灯までのウエイト
+#define BRIGHTNESS 10        // 輝度
+Adafruit_NeoPixel pixels(LED_COUNT, DIN_PIN, NEO_GRB + NEO_KHZ800);
 
-#define COLOR_REPEAT 2
-
-// create a pixel strand with 1 pixel on PIN_NEOPIXEL
-Adafruit_NeoPixel pixels(1, LED_PIN);
-
-uint8_t color = 0, count = 0;
-uint32_t colors[] = {pixels.Color(125, 0, 0), pixels.Color(0, 125, 0), pixels.Color(0, 0, 125), pixels.Color(125, 125, 125)};
-const uint8_t COLORS_LEN = (uint8_t)(sizeof(colors) / sizeof(colors[0]));
-
-void setup() {
-  pixels.begin();  // initialize the pixel
+void setup()
+{
+  pixels.begin();             //NeoPixel制御開始
 }
 
-void loop() {
-  pixels.setPixelColor(0, colors[color]);
-  pixels.show();
-  
-  delay(1000);
-  
+void loop()
+{
   pixels.clear();
+  
+  //pixels.Color(Red, Green, Blue)で、パレット情報を作成する。
+  //赤点灯
+  pixels.setPixelColor(0, pixels.Color(BRIGHTNESS, 0, 0));
   pixels.show();
-  
-  delay(1000);
-  
-  count++;
+  delay(WAIT_MS);
 
-  if(count >= COLOR_REPEAT) {
-    count = 0;
-    color++;
-    if(color >= COLORS_LEN) {
-      color = 0;
-    }
-  }
+  //緑点灯
+  pixels.setPixelColor(0, pixels.Color(0, BRIGHTNESS, 0));
+  pixels.show();
+  delay(WAIT_MS);
+
+  //赤　＋　緑　で　黄点灯
+  pixels.setPixelColor(0, pixels.Color(BRIGHTNESS, BRIGHTNESS, 0));
+  pixels.show();
+  delay(WAIT_MS);
+
+  //青点灯
+  pixels.setPixelColor(0, pixels.Color(0, 0, BRIGHTNESS));
+  pixels.show();
+  delay(WAIT_MS);
+
+  //赤　＋　青　で　紫点灯
+  pixels.setPixelColor(0, pixels.Color(BRIGHTNESS, 0, BRIGHTNESS));
+  pixels.show();
+  delay(WAIT_MS);
+
+  //緑　＋　青　で　水点灯
+  pixels.setPixelColor(0, pixels.Color(0, BRIGHTNESS, BRIGHTNESS));
+  pixels.show();
+  delay(WAIT_MS);
+
+  //赤　＋　緑　＋　青　で　白点灯
+  pixels.setPixelColor(0, pixels.Color(BRIGHTNESS, BRIGHTNESS, BRIGHTNESS));
+  pixels.show();
+  delay(WAIT_MS);
 }
