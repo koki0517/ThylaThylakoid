@@ -13,7 +13,6 @@ VL53L5CX_ResultsData measurementData_right; // Result data class structure, 1356
 VL53L5CX tof_left(0x10, null, myImager_left, measurementData_left);
 VL53L5CX tof_right(0x11, null, myImager_right, measurementData_right);
 
-
 void setup(){
   Serial.begin(1115200);
   Wire.begin(); // This resets I2C bus to 100kHz
