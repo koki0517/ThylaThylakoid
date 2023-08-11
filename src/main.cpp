@@ -1,25 +1,40 @@
 #include <Arduino.h>
-#include "HardwareSerial.h"
-#include <Wire.h>
-#include <SparkFun_VL53L5CX_Library.h>
-#include "VL53L5CX.h"
 
-SparkFun_VL53L5CX myImager_left;
-VL53L5CX_ResultsData measurementData_left; // Result data class structure, 1356 byes of RAM
+#include <Adafruit_NeoPixel.h>
 
-SparkFun_VL53L5CX myImager_right;
-VL53L5CX_ResultsData measurementData_right; // Result data class structure, 1356 byes of RAM
+#define LED_PIN 16
 
-VL53L5CX tof_left(0x10, null, myImager_left, measurementData_left);
-VL53L5CX tof_right(0x11, null, myImager_right, measurementData_right);
+#define COLOR_REPEAT 2
 
+// create a pixel strand with 1 pixel on PIN_NEOPIXEL
+Adafruit_NeoPixel pixels(1, LED_PIN);
 
-void setup(){
-  Serial.begin(1115200);
-  Wire.begin(); // This resets I2C bus to 100kHz
-  Wire.setClock(1000000); //Sensor has max I2C freq of 1MHz
+uint8_t color = 0, count = 0;
+uint32_t colors[] = {pixels.Color(125, 0, 0), pixels.Color(0, 125, 0), pixels.Color(0, 0, 125), pixels.Color(125, 125, 125)};
+const uint8_t COLORS_LEN = (uint8_t)(sizeof(colors) / sizeof(colors[0]));
+
+void setup() {
+  pixels.begin();  // initialize the pixel
 }
-void loop(){}
 
-// void setup1(){}
-// void loop1(){}
+void loop() {
+  pixels.setPixelColor(0, colors[color]);
+  pixels.show();
+  
+  delay(1000);
+  
+  pixels.clear();
+  pixels.show();
+  
+  delay(1000);
+  
+  count++;
+
+  if(count >= COLOR_REPEAT) {
+    count = 0;
+    color++;
+    if(color >= COLORS_LEN) {
+      color = 0;
+    }
+  }
+}
